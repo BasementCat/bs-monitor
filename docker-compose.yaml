@@ -1,0 +1,24 @@
+services:
+  # An example server, for testing purposes
+  queue:
+    image: websmurf/beanstalkd:1.13-alpine-3.20
+    restart: always
+
+  app:
+    build: .
+    command: [
+      '--reload',
+      '--debugger',
+    ]
+    ports:
+      - '5000:5000'
+    restart: always
+    depends_on:
+      - queue
+    environment:
+      - FLASK_BEANSTALK_HOST=queue
+      - FLASK_BEANSTALK_PORT=11300
+      - FLASK_STATS_LIMIT=86400
+      - FLASK_STATS_INTERVAL=1
+    volumes:
+      - .:/app
