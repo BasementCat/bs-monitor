@@ -59,7 +59,9 @@ def run(config):
                 'tubes': tstats,
             })
             _newstats.notify_all()
-        time.sleep(config['STATS_INTERVAL'] - (time.monotonic() - ls))
+        delay = config['STATS_INTERVAL'] - (time.monotonic() - ls)
+        if delay > 0:
+            time.sleep(delay)
 
 
 def get(block=True, since=None, latest=False):
